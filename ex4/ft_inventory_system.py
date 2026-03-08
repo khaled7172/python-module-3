@@ -1,10 +1,10 @@
 import sys
 
 
-def test_inventory_system(arguments):
+def test_inventory_system(arguments: list[str]) -> None:
     print("=== Inventory System Analysis ===")
     unique_items = len(arguments) - 1
-    inventory = {}  # initialize an empty dict
+    inventory: dict[str, int] = {}
     if unique_items == 0:
         print("Empty inventory")
         return
@@ -14,7 +14,6 @@ def test_inventory_system(arguments):
             inventory[key] = int(value)
     total_items = sum(inventory.values())
     unique_types = len(inventory.keys())
-    # print sum of dictionaery values
     print(f"Total items in inventory: {total_items}")
     print(f"Unique item types: {unique_types}")
     print()
@@ -25,37 +24,35 @@ def test_inventory_system(arguments):
             print(f"{key}: {value} units ({percent:.1f}%)")
         else:
             print(f"{key}: {value} unit ({percent:.1f}%)")
-    most_abundant = None  # to store keys of most an least abundant
-    least_abundant = None
-    for item in inventory:  # item = key
-        qty = inventory.get(item)  # fetch the value for current key
+    most_abundant: str | None = None
+    least_abundant: str | None = None
+    for item in inventory:
+        qty = inventory.get(item)
         if most_abundant is None or qty > inventory.get(most_abundant):
             most_abundant = item
         if least_abundant is None or qty < inventory.get(least_abundant):
             least_abundant = item
     print()
     print("=== Inventory Statistics ===")
-    print(
-        f"Most abundant: {most_abundant} ({
-            inventory.get(most_abundant)} units)")
-    print(
-        f"Least abundant: {least_abundant} ({
-            inventory.get(least_abundant)} units)")
+    print(f"Most abundant: {most_abundant} ({inventory.get(most_abundant)}"
+          "units)")
+    print(f"Least abundant: {least_abundant} ({inventory.get(least_abundant)}"
+          "units)")
     print()
     print("=== Item Categories ===")
-    moderate = {}
-    scarce = {}
-    Restock = []
+    moderate: dict[str, int] = {}
+    scarce: dict[str, int] = {}
+    restock: list[str] = []
     restock_str = ""
     for key, value in inventory.items():
         if value >= 5:
             moderate[key] = value
         elif value <= 1:
-            Restock.append(key)
+            restock.append(key)
             scarce[key] = value
         else:
             scarce[key] = value
-    for i, item in enumerate(Restock):
+    for i, item in enumerate(restock):
         if i != 0:
             restock_str += ", "
         restock_str += item

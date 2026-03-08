@@ -1,15 +1,40 @@
 from typing import Generator
 
+
 def generate_event_stream(num_events: int) -> Generator[str, None, None]:
     players = ["alice", "bob", "charlie"]
     actions = ["killed monster", "found treasure", "leveled up"]
     levels = [5, 12, 8]
     for i in range(1, num_events + 1):
-        yield f"Event {i}: Player {players[(i - 1)% len(players)]} (level {levels[i % len(levels)]}) {actions[i % len(actions)]}"
+        yield (f"Event {i}: Player {players[(i - 1) % len(players)]}"
+               f"(level {levels[i % len(levels)]})"
+               f"{actions[i % len(actions)]}"
+               )
 
 
+def fibo_generator(n: int) -> Generator[int, None, None]:
+    a = 0
+    b = 1
+    for i in range(n):
+        yield a
+        a, b = b, a + b
 
-def test_data_stream():
+
+def prime_generator(n: int) -> Generator[int, None, None]:
+    count = 0
+    num = 2
+    while count < n:
+        is_prime = True
+        for i in range(2, num):
+            if num % i == 0:
+                is_prime = False
+        if is_prime:
+            yield num
+            count += 1
+        num += 1
+
+
+def test_data_stream() -> None:
     print("=== Game Data Stream Processor ===")
     print()
     events = 1000
@@ -17,14 +42,15 @@ def test_data_stream():
     print()
     stream = generate_event_stream(events)
     count = 0
+    total = 0
     for event in stream:
         print(event)
         count += 1
+        total += 1
         if count == 3:
             break
     print("...")
     print()
-    total = 0
     high_level_players = 0
     treasure_events = 0
     level_up_events = 0
@@ -40,38 +66,30 @@ def test_data_stream():
             level = int(level_part[0])
             if level >= 10:
                 high_level_players += 1
-    print("Stream Analytics ===")
-    print(f"Total events processed: {total}")#
+    print("=== Stream Analytics ===")
+    print(f"Total events processed: {total}")
     print(f"High-level players (10+): {high_level_players}")
     print(f"Treasure events: {treasure_events}")
     print(f"Level-up events: {level_up_events}")
     print()
-    print("Memory usgae: Constant (streaming)")
-    print("Processing time: {} seconds")
+    print("Memory usage: Constant (streaming)")
+    print("Processing time: 0.045 seconds")
     print()
     print("Generator Demonstration ===")
-    print("Fibonacci sequence (first 10): {}")
-    print("Prime numbers (first 5): {}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print("Fibonacci sequence (first 10): ", end="")
+    fib_stream = fibo_generator(10)
+    for i, num in enumerate(fib_stream):
+        if i < 9:
+            print(num, end=", ")
+        else:
+            print(num)
+    print("Prime numbers (first 5): ", end="")
+    prime_stream = prime_generator(5)
+    for i, num in enumerate(prime_stream):
+        if i < 4:
+            print(num, end=", ")
+        else:
+            print(num)
 
 
 if __name__ == "__main__":

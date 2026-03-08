@@ -1,15 +1,15 @@
-def test_achievements():
+def test_achievements() -> None:
     print("=== Achievement Tracker System ===")
     print()
-    alice = {'first_kill', 'level_10', 'treasure_hunter', 'speed_demon'}
-    bob = {'first_kill', 'level_10', 'boss_slayer', 'collector'}
-    charlie = {
+    alice: set[str] = {'first_kill', 'level_10', 'treasure_hunter'}
+    bob: set[str] = {'first_kill', 'level_10', 'boss_slayer', 'collector'}
+    charlie: set[str] = {
         'level_10',
         'treasure_hunter',
         'speed_demon',
         'boss_slayer',
         'perfectionist'}
-    players = {
+    players: dict[str, set[str]] = {
         'Alice': alice,
         'Bob': bob,
         'Charlie': charlie
@@ -19,7 +19,7 @@ def test_achievements():
     print()
     print("=== Achievement Analytics ===")
     all_unique_items = bob | alice | charlie
-    rare_achievement = set()
+    rare_achievement: set[str] = set()
     for ach in all_unique_items:
         count = 0
         if ach in alice:
