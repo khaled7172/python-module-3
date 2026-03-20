@@ -1,55 +1,44 @@
-import sys
 import math
 
 
-def parsing_formula(arguments: list[str]) -> None:
-    origin: tuple[int, int, int] = (0, 0, 0)
-    default_position: tuple[int, int, int] = (10, 20, 5)
-    distance = math.sqrt((default_position[0] -
-                          origin[0]) ** 2 +
-                         (default_position[1] -
-                          origin[1]) ** 2 +
-                         (default_position[2] -
-                          origin[2]) ** 2)
-    if len(arguments) == 1:
-        print(f"Position created: {default_position}")
-        print(f"Distance between {origin} and {default_position}:"
-              f"{distance:.2f}")
-    else:
-        print(f"Parsing coordinates: {arguments[1]}")
-        split_string = arguments[1].split(",")
-        temp_list: list[int] = []
-        for i in split_string:
+def get_player_pos() -> tuple[float, float, float]:
+    while True:
+        raw = input("Enter new coordinates as floats in format 'x,y,z': ")
+        parts = raw.split(",")
+        if len(parts) != 3:
+            print("Invalid syntax")
+            continue
+        coords: list[float] = []
+        error = False
+        for part in parts:
             try:
-                num = int(i)
-                temp_list.append(num)
+                coords.append(float(part.strip()))
             except ValueError as e:
-                print(f"Error parsing coordinates: {e}")
-                print(f"Error details - Type: ValueError, Args: ({e},)")
-                print()
-                return
-
-        new_tuple = tuple(temp_list)
-        distance = math.sqrt((new_tuple[0] -
-                              origin[0]) ** 2 +
-                             (new_tuple[1] -
-                              origin[1]) ** 2 +
-                             (new_tuple[2] -
-                              origin[2]) ** 2)
-        print(f"Parsed position: {new_tuple}")
-        print(f"Distance between {origin} and {new_tuple}: {distance}")
-        print()
-        print("Unpacking demonstration:")
-        print(f"Player at x={new_tuple[0]}, y={new_tuple[1]},"
-              f"z={new_tuple[2]}")
-        print(f"Coordinates: X={new_tuple[0]}, Y={new_tuple[1]},"
-              f"Z={new_tuple[2]}")
+                print(f"Error on parameter '{part.strip()}': {e}")
+                error = True
+                break
+        if not error:
+            return (coords[0], coords[1], coords[2])
 
 
 def test_coordinate_system() -> None:
     print("=== Game Coordinate System ===")
     print()
-    parsing_formula(sys.argv)
+    print("Get a first set of coordinates")
+    pos1 = get_player_pos()
+    print(f"Got a first tuple: {pos1}")
+    print(f"It includes: X={pos1[0]}, Y={pos1[1]}, Z={pos1[2]}")
+    dist1 = round(math.sqrt(pos1[0] ** 2 + pos1[1] ** 2 + pos1[2] ** 2), 4)
+    print(f"Distance to center: {dist1}")
+    print()
+    print("Get a second set of coordinates")
+    pos2 = get_player_pos()
+    dist2 = round(math.sqrt(
+        (pos2[0] - pos1[0]) ** 2 +
+        (pos2[1] - pos1[1]) ** 2 +
+        (pos2[2] - pos1[2]) ** 2
+    ), 4)
+    print(f"Distance between the 2 sets of coordinates: {dist2}")
 
 
 if __name__ == "__main__":

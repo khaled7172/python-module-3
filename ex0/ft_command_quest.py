@@ -3,9 +3,9 @@ import sys
 
 def argument_info(arguments: list[str]) -> None:
     length = len(arguments)
+    print(f"Program name: {arguments[0]}")
     if length == 1:
         print("No arguments provided!")
-    print(f"Program name: {arguments[0]}")
     if length > 1:
         print(f"Arguments received: {length - 1}")
     for arg in range(1, len(arguments)):
